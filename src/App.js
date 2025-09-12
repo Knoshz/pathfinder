@@ -2,6 +2,7 @@ import { useRef, useEffect } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './App.css';
+import Modal from './components/modal';
 
 const App = () => {
   const mapRef = useRef();
@@ -22,9 +23,10 @@ const App = () => {
   }, []);
 
   return (
-    <>
+    <div className='relative w-full h-screen'>
       <div id='map-container' ref={mapContainerRef}/>
-    </>
+      <Modal />
+    </div>
   );
 }
 
