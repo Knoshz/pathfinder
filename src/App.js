@@ -1,8 +1,9 @@
-import { useRef, useEffect, useState, use } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './App.css';
 import Modal from './components/modal';
+import { getCurrentPosition } from './services/api';
 
 const App = () => {
   const mapRef = useRef();
@@ -19,23 +20,41 @@ const App = () => {
       zoom: 12
     });
 
-    const errorLocation = () => {
-      console.log("Não foi possível obter a localização.");
-    }
+    // getCurrentPosition().then(data => {
+    //   if(data && data.location) {
+    //     console.log(data)
+    //     const userCoords = [data.location.lng, data.location.lat];       
+    //     new mapboxgl.Marker({ color: "blue" })
+    //     .setLngLat(userCoords)
+    //     .setPopup(new mapboxgl.Popup().setText("Você está aqui"))
+    //     .addTo(mapRef.current);
+    //     mapRef.current.setCenter(userCoords);
+    //   }
+    // });
+
+    navigator.geolocation.getCurrentPosition(
+        (position) => {
+          console.log(position);
+        },
+      );
+
+    // const errorLocation = () => {
+    //   console.log("Não foi possível obter a localização.");
+    // }
   
-    const successLocation = (position) => {
-      const userCoords = [position.coords.longitude, position.coords.latitude];
+    // const successLocation = (position) => {
+    //   const userCoords = [position.coords.longitude, position.coords.latitude];
 
-      new mapboxgl.Marker({ color: "blue" })
-      .setLngLat(userCoords)
-      .setPopup(new mapboxgl.Popup().setText("Você está aqui"))
-      .addTo(mapRef.current);
+    //   new mapboxgl.Marker({ color: "blue" })
+    //   .setLngLat(userCoords)
+    //   .setPopup(new mapboxgl.Popup().setText("Você está aqui"))
+    //   .addTo(mapRef.current);
 
-      mapRef.current.setCenter(userCoords);
-    };
+    //   mapRef.current.setCenter(userCoords);
+    // };
 
-    // Pega sua localização atual
-    navigator.geolocation.getCurrentPosition(successLocation, errorLocation);
+    // // Pega sua localização atual
+    // navigator.geolocation.getCurrentPosition(successLocation, errorLocation);
 
     return () => {
       mapRef.current.remove();
