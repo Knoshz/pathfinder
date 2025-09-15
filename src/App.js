@@ -20,23 +20,19 @@ const App = () => {
       zoom: 12
     });
 
-    // getCurrentPosition().then(data => {
-    //   if(data && data.location) {
-    //     console.log(data)
-    //     const userCoords = [data.location.lng, data.location.lat];       
-    //     new mapboxgl.Marker({ color: "blue" })
-    //     .setLngLat(userCoords)
-    //     .setPopup(new mapboxgl.Popup().setText("Você está aqui"))
-    //     .addTo(mapRef.current);
-    //     mapRef.current.setCenter(userCoords);
-    //   }
-    // });
+    getCurrentPosition().then(data => {
+      if(data && data.location) {
+        console.log(data)
+        const userCoords = [data.location.lng, data.location.lat];       
+        new mapboxgl.Marker({ color: "blue" })
+        .setLngLat(userCoords)
+        .setPopup(new mapboxgl.Popup().setText("Você está aqui"))
+        .addTo(mapRef.current);
+        mapRef.current.setCenter(userCoords);
+      }
+    });
 
-    navigator.geolocation.getCurrentPosition(
-        (position) => {
-          console.log(position);
-        },
-      );
+    
 
     // const errorLocation = () => {
     //   console.log("Não foi possível obter a localização.");
