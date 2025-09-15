@@ -21,17 +21,15 @@ const Modal = ({ setDestinations }) => {
     };
 
     const fetchCoordinatesData = async () => {
-        const address = `${logradouro}, ${numero}, ${bairro}, ${cidade}, ${uf}, Brasil`;
+        const address = `${logradouro}, ${numero}, ${bairro}, ${cidade}, ${uf}`;
         const data = await getCoordinates(address);
         if (data && data.results && data.results.length > 0) {
-            const { lat, lng } = data.results[0].geometry;
+            const { lat, lng } = data.results[0].geometry?.location;
 
             setDestinations(prev => [
             ...prev,
             { nome: "Destino do Modal", coords: [lng, lat] }
             ]);
-
-            console.log(`Latitude: ${lat}, Longitude: ${lng}`);
         } else {
             console.log('No coordinates found for the given address.');
         }
