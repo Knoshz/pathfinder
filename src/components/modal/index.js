@@ -1,23 +1,20 @@
 import { useState } from "react";
 import { getCep, getCoordinates } from "../../services/api";
+import { Plus } from 'lucide-react';
 
 const Modal = ({ setDestinations }) => {
-    const [modalOpen, setModalOpen] = useState(false);
-    // const [cep, setCep] = useState('');
-    // const [logradouro, setLogradouro] = useState('');
-    // const [numero, setNumero] = useState('');
-    // const [bairro, setBairro] = useState('');
-    // const [cidade, setCidade] = useState('');
-    // const [uf, setUf] = useState('');
 
-    const [form, setForm] = useState({
-        cep: "",
-        logradouro: "",
-        numero: "",
-        bairro: "",
-        cidade: "",
-        uf: "",
-    });
+    const initialState = {
+        cep: { value: "", error: "" },
+        logradouro: { value: "", error: "" },
+        numero: { value: "", error: "" },
+        bairro: { value: "", error: "" },
+        cidade: { value: "", error: "" },
+        uf: { value: "", error: "" },
+    };
+
+    const [modalOpen, setModalOpen] = useState(false);
+    const [form, setForm] = useState(initialState);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -61,10 +58,10 @@ const Modal = ({ setDestinations }) => {
     return(
         <>
             <button 
-            className="absolute top-4 left-4 text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center" 
+            className="absolute top-4 left-4 text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2 text-center" 
             type="button"
             onClick={() => setModalOpen(true)}>
-                Toggle modal
+                <Plus color="white" size={24} />
             </button>
 
             {modalOpen && (
@@ -86,51 +83,51 @@ const Modal = ({ setDestinations }) => {
                         {/* Modal body  */}
                         <div className="p-4 md:p-5 space-y-4">
                             <form>
-                                <div className="flex flex-col gap-1 w-96">
+                                <div className="flex flex-col gap-1 w-full box-border">
                                     <label className="text-gray-700 text-sm">CEP</label>
                                     <input
                                         type="text"
                                         name="cep"
-                                        placeholder="Type here"
+                                        placeholder="Digite aqui"
                                         className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
-                                        value={form.cep}
+                                        value={form.cep.value}
                                         onChange={(e) => handleChange(e)}
                                         onBlur={() => fetchCepData(form.cep)}
                                     />
                                     <p className="text-xs text-gray-500">Assistive Text</p>
                                 </div>
-                                <div className="flex flex-col gap-1 w-96">
+                                <div className="flex flex-col gap-1 w-full box-border">
                                     <label className="text-gray-700 text-sm">Logradouro</label>
                                     <input
                                         type="text"
                                         name="logradouro"
-                                        placeholder="Type here"
+                                        placeholder="Digite aqui"
                                         className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
-                                        value={form.logradouro}
+                                        value={form.logradouro.value}
                                         onChange={handleChange}
                                     />
                                     <p className="text-xs text-gray-500">Assistive Text</p>
                                 </div>
-                                <div className="flex flex-col gap-1 w-96">
+                                <div className="flex flex-col gap-1 w-full box-border">
                                     <label className="text-gray-700 text-sm">Número</label>
                                     <input
                                         type="text"
                                         name="numero"
-                                        placeholder="Type here"
+                                        placeholder="Digite aqui"
                                         className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
-                                        value={form.numero}
+                                        value={form.numero.value}
                                         onChange={handleChange}
                                     />
                                     <p className="text-xs text-gray-500">Assistive Text</p>
                                 </div>
-                                <div className="flex flex-col gap-1 w-96">
+                                <div className="flex flex-col gap-1 w-full box-border">
                                     <label className="text-gray-700 text-sm">Bairro</label>
                                     <input
                                         type="text"
                                         name="bairro"
-                                        placeholder="Type here"
+                                        placeholder="Digite aqui"
                                         className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
-                                        value={form.bairro}
+                                        value={form.bairro.value}
                                         onChange={handleChange}
                                     />
                                     <p className="text-xs text-gray-500">Assistive Text</p>
@@ -141,9 +138,9 @@ const Modal = ({ setDestinations }) => {
                                         <input
                                             type="text"
                                             name="cidade"
-                                            placeholder="Type here"
+                                            placeholder="Digite aqui"
                                             className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
-                                            value={form.cidade}
+                                            value={form.cidade.value}
                                             onChange={handleChange}
                                         />
                                         <p className="text-xs text-gray-500">Assistive Text</p>
@@ -153,9 +150,9 @@ const Modal = ({ setDestinations }) => {
                                         <input
                                             type="text"
                                             name="uf"
-                                            placeholder="Type here"
+                                            placeholder="Digite aqui"
                                             className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
-                                            value={form.uf}
+                                            value={form.uf.value}
                                             onChange={handleChange}
                                         />
                                         <p className="text-xs text-gray-500">Assistive Text</p>
