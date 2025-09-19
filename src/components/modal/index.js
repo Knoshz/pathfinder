@@ -28,6 +28,15 @@ const Modal = ({ setDestinations }) => {
 
     const fetchCepData = async (cep) => {
         const data = await getCep(cep); 
+
+        if (cep.length !== 8) {
+            setForm(prev => ({
+            ...prev,
+            cep: { value: cep, error: "CEP inválido. Deve conter 8 dígitos." }
+            }));
+            return;
+        }
+
         if (data) {
             setForm(prev => ({
             ...prev,
@@ -40,6 +49,20 @@ const Modal = ({ setDestinations }) => {
     };
 
     const fetchCoordinatesData = async () => {
+        if(!form.cep || !form.logradouro || !form.numero || !form.bairro || !form.cidade || !form.uf) {
+            setForm(prev => {
+                const updatedForm = { ...prev };
+                if(!form.cep) updatedForm.cep.error = "CEP é obrigatório.";
+                if(!form.logradouro) updatedForm.logradouro.error = "Logradouro é obrigatório.";
+                if(!form.numero) updatedForm.numero.error = "Número é obrigatório.";
+                if(!form.bairro) updatedForm.bairro.error = "Bairro é obrigatório.";
+                if(!form.cidade) updatedForm.cidade.error = "Cidade é obrigatória.";
+                if(!form.uf) updatedForm.uf.error = "UF é obrigatório.";
+                return updatedForm;
+            });
+            return;
+        }
+
         const address = `${form.logradouro}, ${form.numero}, ${form.bairro}, ${form.cidade}, ${form.uf}`;
         const data = await getCoordinates(address);
         if (data && data.results && data.results.length > 0) {
@@ -71,7 +94,7 @@ const Modal = ({ setDestinations }) => {
                         {/* Modal header */}
                         <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-300 border-gray-200">
                             <h3 className="text-xl font-semibold text-gray-900">
-                                Terms of Service
+                                Endereço
                             </h3>
                             <button type="button" onClick={() => handleClose()} className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="default-modal">
                                 <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
@@ -83,7 +106,7 @@ const Modal = ({ setDestinations }) => {
                         {/* Modal body  */}
                         <div className="p-4 md:p-5 space-y-4">
                             <form>
-                                <div className="flex flex-col gap-1 w-full box-border">
+                                <div className="flex flex-col gap-1 w-full box-border pb-2">
                                     <label className="text-gray-700 text-sm">CEP</label>
                                     <input
                                         type="text"
@@ -94,9 +117,9 @@ const Modal = ({ setDestinations }) => {
                                         onChange={(e) => handleChange(e)}
                                         onBlur={() => fetchCepData(form.cep)}
                                     />
-                                    <p className="text-xs text-gray-500">Assistive Text</p>
+                                    {form.cep.error && <p className="text-xs text-red-500">{form.cep.error}</p>}
                                 </div>
-                                <div className="flex flex-col gap-1 w-full box-border">
+                                <div className="flex flex-col gap-1 w-full box-border pb-2">
                                     <label className="text-gray-700 text-sm">Logradouro</label>
                                     <input
                                         type="text"
@@ -106,9 +129,9 @@ const Modal = ({ setDestinations }) => {
                                         value={form.logradouro.value}
                                         onChange={handleChange}
                                     />
-                                    <p className="text-xs text-gray-500">Assistive Text</p>
+                                    {form.logradouro.error && <p className="text-xs text-red-500">{form.logradouro.error}</p>}
                                 </div>
-                                <div className="flex flex-col gap-1 w-full box-border">
+                                <div className="flex flex-col gap-1 w-full box-border pb-2">
                                     <label className="text-gray-700 text-sm">Número</label>
                                     <input
                                         type="text"
@@ -118,9 +141,9 @@ const Modal = ({ setDestinations }) => {
                                         value={form.numero.value}
                                         onChange={handleChange}
                                     />
-                                    <p className="text-xs text-gray-500">Assistive Text</p>
+                                    {form.numero.error && <p className="text-xs text-red-500">{form.numero.error}</p>}
                                 </div>
-                                <div className="flex flex-col gap-1 w-full box-border">
+                                <div className="flex flex-col gap-1 w-full box-border pb-2">
                                     <label className="text-gray-700 text-sm">Bairro</label>
                                     <input
                                         type="text"
@@ -130,10 +153,10 @@ const Modal = ({ setDestinations }) => {
                                         value={form.bairro.value}
                                         onChange={handleChange}
                                     />
-                                    <p className="text-xs text-gray-500">Assistive Text</p>
+                                    {form.bairro.error && <p className="text-xs text-red-500">{form.bairro.error}</p>}
                                 </div>
                                 <div className="flex gap-4">
-                                    <div className="flex flex-col gap-1 w-96">
+                                    <div className="flex flex-col gap-1 w-96 box-border">
                                         <label className="text-gray-700 text-sm">Cidade</label>
                                         <input
                                             type="text"
@@ -143,9 +166,9 @@ const Modal = ({ setDestinations }) => {
                                             value={form.cidade.value}
                                             onChange={handleChange}
                                         />
-                                        <p className="text-xs text-gray-500">Assistive Text</p>
+                                        {form.cidade.error && <p className="text-xs text-red-500">{form.cidade.error}</p>}
                                     </div>
-                                    <div className="flex flex-col gap-1 w-40">
+                                    <div className="flex flex-col gap-1 w-46 box-border">
                                         <label className="text-gray-700 text-sm">UF</label>
                                         <input
                                             type="text"
@@ -155,7 +178,7 @@ const Modal = ({ setDestinations }) => {
                                             value={form.uf.value}
                                             onChange={handleChange}
                                         />
-                                        <p className="text-xs text-gray-500">Assistive Text</p>
+                                        {form.uf.error && <p className="text-xs text-red-500">{form.uf.error}</p>}
                                     </div>
                                 </div>
                             </form>
